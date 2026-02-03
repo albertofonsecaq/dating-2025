@@ -1,14 +1,15 @@
 using API.Data;
 using API.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers;
 
-[Route("api/[controller]")] //localhost:5001/api/members
-[ApiController]
-public class MembersController(AppDbContext context) : ControllerBase
+[Authorize]
+public class MembersController(AppDbContext context): BaseApiController
 {
+    [AllowAnonymous]
     [HttpGet]
     public async Task< ActionResult<IReadOnlyList<AppUser>> > GetMembers()
     {
@@ -16,6 +17,7 @@ public class MembersController(AppDbContext context) : ControllerBase
         return Ok(members);
     }
 
+    
     [HttpGet("{id}")] //localhost:5001/api/members/bob-id
     public async Task< ActionResult<AppUser> > GetMember(string id)
     {
